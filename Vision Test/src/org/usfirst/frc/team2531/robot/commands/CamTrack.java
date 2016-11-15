@@ -14,7 +14,7 @@ import frclib.vision.Camera;
  *
  */
 public class CamTrack extends Command {
-	PID pid = new PID(0.1, 0, 0, 0);
+	PID pid = new PID(0.1, 0, 0, 640);
 	double out = 0;
 	double minarea = 20;
 
@@ -46,9 +46,8 @@ public class CamTrack extends Command {
 			}
 			if (blobs.size() > 0) {
 				pos /= blobs.size();
-				pos-=640;
-				out = pos/640;
-			}else{
+				out = pid.compute(pos);
+			} else {
 				out = 0;
 			}
 		} else {
