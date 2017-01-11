@@ -1,12 +1,12 @@
 
 package org.usfirst.frc.team2531.robot;
 
-import org.usfirst.frc.team2531.robot.commands.ShowBlobs;
 import org.usfirst.frc.team2531.robot.subsystems.DriveSystem;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import frclib.vision.Vision;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,7 +24,6 @@ public class Robot extends IterativeRobot {
 		System.out.println("# Robot");
 		drive = new DriveSystem();
 		oi = new OI();
-		new ShowBlobs().start();
 	}
 
 	/**

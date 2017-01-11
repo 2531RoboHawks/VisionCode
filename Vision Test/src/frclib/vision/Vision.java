@@ -9,7 +9,9 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
+import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 
 public class Vision {
@@ -18,7 +20,10 @@ public class Vision {
 	private int max1 = 0, max2 = 0, max3 = 0;
 
 	public Vision() {
-		CameraServer.getInstance().startAutomaticCapture();
+		UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
+		cam.setResolution(640, 480);
+		in = CameraServer.getInstance().getVideo();
+		out = CameraServer.getInstance().putVideo("vision", 640, 480);
 	}
 
 	public void setColor(int min1, int max1, int min2, int max2, int min3, int max3) {
@@ -134,14 +139,19 @@ public class Vision {
 		return 0;
 	}
 
+	private CvSink in;
+
 	public Mat getImage() {
 		Mat mat = new Mat();
-		CameraServer.getInstance().getVideo().grabFrame(mat);
+		in.grabFrame(mat);
+		// CameraServer.getInstance().getVideo().grabFrame(mat);
 		return mat;
 	}
 
+	private CvSource out;
+
 	public void putImage(String name, Mat mat) {
-		CvSource out = CameraServer.getInstance().putVideo(name, 640, 480);
+		// CameraServer.getInstance().putVideo(name, 640, 480).putFrame(mat);
 		out.putFrame(mat);
 	}
 
