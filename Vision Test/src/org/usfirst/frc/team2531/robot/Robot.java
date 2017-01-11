@@ -1,8 +1,7 @@
 
 package org.usfirst.frc.team2531.robot;
 
-import org.opencv.core.Mat;
-import org.opencv.core.Scalar;
+import org.usfirst.frc.team2531.robot.commands.ShowBlobs;
 import org.usfirst.frc.team2531.robot.subsystems.DriveSystem;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -25,6 +24,7 @@ public class Robot extends IterativeRobot {
 		System.out.println("# Robot");
 		drive = new DriveSystem();
 		oi = new OI();
+		new ShowBlobs().start();
 	}
 
 	/**
@@ -38,10 +38,6 @@ public class Robot extends IterativeRobot {
 
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
-		Mat m = RobotMap.vision.getImage();
-		RobotMap.vision.setColor(0, 255, 0, 20, 0, 255);
-		RobotMap.vision.putImage("camera",
-				RobotMap.vision.showBlobs(m, RobotMap.vision.HLSgetBlobs(m), new Scalar(0, 255, 0)));
 	}
 
 	/**
@@ -64,10 +60,6 @@ public class Robot extends IterativeRobot {
 	 */
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
-		Mat m = RobotMap.vision.getImage();
-		RobotMap.vision.setColor(0, 255, 0, 20, 0, 255);
-		RobotMap.vision.putImage("camera",
-				RobotMap.vision.showBlobs(m, RobotMap.vision.HLSgetBlobs(m), new Scalar(0, 255, 0)));
 	}
 
 	public void teleopInit() {
@@ -79,10 +71,6 @@ public class Robot extends IterativeRobot {
 	 */
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		Mat m = RobotMap.vision.getImage();
-		RobotMap.vision.setColor(0, 255, 0, 20, 0, 255);
-		RobotMap.vision.putImage("camera",
-				RobotMap.vision.showBlobs(m, RobotMap.vision.HLSgetBlobs(m), new Scalar(0, 255, 0)));
 	}
 
 	/**
