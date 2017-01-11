@@ -1,7 +1,6 @@
 package org.usfirst.frc.team2531.robot;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import frclib.sensors.ADIS16448;
+import frclib.vision.Vision;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -10,24 +9,6 @@ import frclib.sensors.ADIS16448;
  * floating around.
  */
 public class RobotMap {
-	// Control Configurations
-	public static boolean USE_GAMEPAD_DRIVEING = true;
-	// true if drive from gamepad
 
-	public static boolean USE_GAMEPAD_ACTIONS = true;
-	// true if control actions with gamepad
-
-	public static boolean DEMO_MODE = false;
-	// true enables "demo mode"
-	// features: only
-	// drives with gamepad and power is
-	// limited to 50% with actions are
-	// disabled
-
-	// Sensors
-	public static ADIS16448 imu = new ADIS16448();
-
-	// Switches
-	public static DigitalInput elevatorup = new DigitalInput(0);
-	public static DigitalInput elevatordown = new DigitalInput(1);
+	public static Vision vision = new Vision();
 }

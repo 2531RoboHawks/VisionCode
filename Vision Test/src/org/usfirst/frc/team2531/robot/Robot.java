@@ -1,21 +1,13 @@
 
 package org.usfirst.frc.team2531.robot;
 
-import org.usfirst.frc.team2531.robot.commands.AutoSequence;
-import org.usfirst.frc.team2531.robot.commands.CamTrack;
-import org.usfirst.frc.team2531.robot.subsystems.BallElevator;
-import org.usfirst.frc.team2531.robot.subsystems.BallIntake;
-import org.usfirst.frc.team2531.robot.subsystems.Drive;
-import org.usfirst.frc.team2531.robot.subsystems.Shooter;
+import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
+import org.usfirst.frc.team2531.robot.subsystems.DriveSystem;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frclib.vision.Camera;
-import frclib.vision.VisionTracking;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -27,35 +19,12 @@ import frclib.vision.VisionTracking;
 public class Robot extends IterativeRobot {
 
 	public static OI oi;
-	// subsystems
-	public static Drive drive;
-	public static BallElevator elevator;
-	public static BallIntake intake;
-	public static Shooter shooter;
-	// variables
-	public static int mode = 0;
-	public static double heading;
+	public static DriveSystem drive;
 
-	public static VisionTracking vision;
-
-	SendableChooser c = new SendableChooser();
-	Command auto;
-
-	/**
-	 * This function is run when the robot is first started up and should be
-	 * used for any initialization code.
-	 */
 	public void robotInit() {
-		System.out.println("-> Robot");
-		drive = new Drive();
-		elevator = new BallElevator();
-		intake = new BallIntake();
-		shooter = new Shooter();
+		System.out.println("# Robot");
+		drive = new DriveSystem();
 		oi = new OI();
-		vision = new VisionTracking(new Camera("cam0"));
-		RobotMap.imu.calibrate();
-		RobotMap.imu.startLiveWindowMode();
-		heading = RobotMap.imu.getRoll();
 	}
 
 	/**
@@ -64,23 +33,15 @@ public class Robot extends IterativeRobot {
 	 * the robot is disabled.
 	 */
 	public void disabledInit() {
-		if (vision.isStarted) {
-			vision.stopCam();
-		}
-		if (mode >= 2) {
-			System.out.println("-! Autonomous");
-		}
-		if (mode == 1) {
-			System.out.println("-! Teleop");
-		}
 		System.out.println("# Disabled");
-		System.out.println("-> Disabled");
-		mode = 0;
 	}
 
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
-		updateSmartDashboard();
+		Mat m = RobotMap.vision.getImage();
+		RobotMap.vision.setColor(0, 255, 0, 20, 0, 255);
+		RobotMap.vision.putImage("camera",
+				RobotMap.vision.showBlobs(m, RobotMap.vision.HLSgetBlobs(m), new Scalar(0, 255, 0)));
 	}
 
 	/**
@@ -96,24 +57,6 @@ public class Robot extends IterativeRobot {
 	 */
 	public void autonomousInit() {
 		System.out.println("# Autonomous");
-		System.out.println("-> Autonomous");
-		mode = 2;
-		if (!vision.isStarted) {
-			vision.startCam();
-		}
-		/*
-		 * String autoSelected = SmartDashboard.getString("Auto Selector",
-		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
-		 * = new MyAutoCommand(); break; case "Default Auto": default:
-		 * autonomousCommand = new ExampleCommand(); break; }
-		 */
-
-		// schedule the autonomous command (example)
-		auto = (Command) c.getSelected();
-		if (auto != null) {
-			auto.start();
-		}
-
 	}
 
 	/**
@@ -121,29 +64,14 @@ public class Robot extends IterativeRobot {
 	 */
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
-		updateSmartDashboard();
-		vision.setColor(255, 80, 50, 0, 50, 0);
-		// vision.displayRawImage();
-		vision.displayBlobs();
+		Mat m = RobotMap.vision.getImage();
+		RobotMap.vision.setColor(0, 255, 0, 20, 0, 255);
+		RobotMap.vision.putImage("camera",
+				RobotMap.vision.showBlobs(m, RobotMap.vision.HLSgetBlobs(m), new Scalar(0, 255, 0)));
 	}
 
 	public void teleopInit() {
-		if (!vision.isStarted) {
-			vision.startCam();
-		}
-		if (auto != null) {
-			auto.cancel();
-		}
-		if (mode >= 2) {
-			System.out.println("-! Autonomous");
-		}
 		System.out.println("# Teleop");
-		System.out.println("-> Teleop");
-		mode = 1;
-		// This makes sure that the autonomous stops running when
-		// teleop starts running. If you want the autonomous to
-		// continue until interrupted by another command, remove
-		// this line or comment it out.
 	}
 
 	/**
@@ -151,10 +79,10 @@ public class Robot extends IterativeRobot {
 	 */
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		updateSmartDashboard();
-		vision.setColor(255, 80, 50, 0, 50, 0);
-		// vision.displayRawImage();
-		vision.displayBlobs();
+		Mat m = RobotMap.vision.getImage();
+		RobotMap.vision.setColor(0, 255, 0, 20, 0, 255);
+		RobotMap.vision.putImage("camera",
+				RobotMap.vision.showBlobs(m, RobotMap.vision.HLSgetBlobs(m), new Scalar(0, 255, 0)));
 	}
 
 	/**
@@ -162,14 +90,5 @@ public class Robot extends IterativeRobot {
 	 */
 	public void testPeriodic() {
 		LiveWindow.run();
-	}
-
-	public void updateSmartDashboard() {
-		c.addDefault("None", null);
-		c.addObject("AutoSequence", new AutoSequence());
-		c.addObject("Vision", new CamTrack(new Camera("cam0")));
-		SmartDashboard.putData("Auto", c);
-		SmartDashboard.putNumber("pitch", RobotMap.imu.getYaw());
-		SmartDashboard.putNumber("yaw", RobotMap.imu.getRoll());
 	}
 }

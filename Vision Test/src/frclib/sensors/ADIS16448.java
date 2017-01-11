@@ -86,8 +86,30 @@ public class ADIS16448 extends GyroBase implements Gyro, PIDSource, LiveWindowSe
 	private ByteBuffer m_cmd, m_resp;
 
 	private static class InterruptSource extends DigitalSource {
+		int channel = 0;
+
 		public InterruptSource(int channel) {
-			initDigitalPort(channel, true);
+			this.channel = channel;
+		}
+
+		@Override
+		public boolean isAnalogTrigger() {
+			return false;
+		}
+
+		@Override
+		public int getChannel() {
+			return channel;
+		}
+
+		@Override
+		public int getAnalogTriggerTypeForRouting() {
+			return 0;
+		}
+
+		@Override
+		public int getPortHandleForRouting() {
+			return 0;
 		}
 	}
 
