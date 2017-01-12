@@ -1,7 +1,5 @@
 package org.usfirst.frc.team2531.robot;
 
-import frclib.vision.Vision;
-
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -10,5 +8,4 @@ import frclib.vision.Vision;
  */
 public class RobotMap {
 
-	public static Vision vision;
 }

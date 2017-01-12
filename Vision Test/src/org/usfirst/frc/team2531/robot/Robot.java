@@ -20,11 +20,13 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 	public static DriveSystem drive;
 
+	public static Vision cam0;
+
 	public void robotInit() {
 		System.out.println("# Robot");
 		drive = new DriveSystem();
 		oi = new OI();
-		RobotMap.vision = new Vision("cam0", 0);
+		cam0 = new Vision("cam0", 0);
 	}
 
 	/**
@@ -38,7 +40,7 @@ public class Robot extends IterativeRobot {
 
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
-		RobotMap.vision.showLive();
+		cam0.showLive();
 	}
 
 	/**
@@ -61,7 +63,7 @@ public class Robot extends IterativeRobot {
 	 */
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
-		RobotMap.vision.showLive();
+
 	}
 
 	public void teleopInit() {
@@ -73,7 +75,7 @@ public class Robot extends IterativeRobot {
 	 */
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		RobotMap.vision.showLive();
+		cam0.showLive();
 	}
 
 	/**
