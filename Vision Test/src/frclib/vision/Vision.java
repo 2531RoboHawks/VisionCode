@@ -19,23 +19,27 @@ public class Vision {
 	private int min1 = 0, min2 = 0, min3 = 0;
 	private int max1 = 0, max2 = 0, max3 = 0;
 
-	private UsbCamera cam;
-	private CvSink in1;
+	private CvSink sink;
+	private CvSource source;
 
-	public Vision() {
-		cam = CameraServer.getInstance().startAutomaticCapture();
-		cam.setResolution(640, 480);
-		in1 = CameraServer.getInstance().getVideo("cam1");
-		out = CameraServer.getInstance().putVideo("vision", 640, 480);
+	public Vision(String name, int dev) {
+		UsbCamera cam = new UsbCamera(name, dev);
+		sink = CameraServer.getInstance().getVideo(cam);
+		source = CameraServer.getInstance().putVideo(name, 640, 480);
 	}
 
-	public void start() {
+	public Mat getImage() {
+		Mat mat = new Mat();
+		sink.grabFrame(mat);
+		return mat;
 	}
 
-	public void updateFeed() {
-		Mat m = new Mat();
-		in.grabFrame(m);
-		out.putFrame(m);
+	public void putImage(Mat mat) {
+		source.putFrame(mat);
+	}
+
+	public void showLive() {
+		putImage(getImage());
 	}
 
 	public void setColor(int min1, int max1, int min2, int max2, int min3, int max3) {
@@ -95,86 +99,12 @@ public class Vision {
 		return blobs;
 	}
 
-	public ArrayList<Rect> HLSgetBlobs() {
-		Mat mat = getImage();
-		ArrayList<Rect> blobs = new ArrayList<Rect>();
-		ArrayList<MatOfPoint> c = new ArrayList<MatOfPoint>();
-		Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2HLS);
-		Core.inRange(mat, new Scalar(min1, min2, min3), new Scalar(max1, max2, max3), mat);
-		Imgproc.findContours(mat, c, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
-		for (int i = 0; i < c.size(); i++) {
-			MatOfPoint mop = c.get(i);
-			if (mop != null) {
-				blobs.add(Imgproc.boundingRect(mop));
-			}
-		}
-		return blobs;
-	}
-
-	public ArrayList<Rect> HSVgetBlobs() {
-		Mat mat = getImage();
-		ArrayList<Rect> blobs = new ArrayList<Rect>();
-		ArrayList<MatOfPoint> c = new ArrayList<MatOfPoint>();
-		Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2HSV);
-		Core.inRange(mat, new Scalar(min1, min2, min3), new Scalar(max1, max2, max3), mat);
-		Imgproc.findContours(mat, c, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
-		for (int i = 0; i < c.size(); i++) {
-			MatOfPoint mop = c.get(i);
-			if (mop != null) {
-				blobs.add(Imgproc.boundingRect(mop));
-			}
-		}
-		return blobs;
-	}
-
-	public ArrayList<Rect> RGBgetBlobs() {
-		Mat mat = getImage();
-		ArrayList<Rect> blobs = new ArrayList<Rect>();
-		ArrayList<MatOfPoint> c = new ArrayList<MatOfPoint>();
-		Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2RGB);
-		Core.inRange(mat, new Scalar(min1, min2, min3), new Scalar(max1, max2, max3), mat);
-		Imgproc.findContours(mat, c, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
-		for (int i = 0; i < c.size(); i++) {
-			MatOfPoint mop = c.get(i);
-			if (mop != null) {
-				blobs.add(Imgproc.boundingRect(mop));
-			}
-		}
-		return blobs;
-	}
-
 	public static double getDistance(Rect rect, double fov, int objectwidth, int imagewidth) {
 		if (rect != null) {
 			double d = objectwidth * imagewidth / (2 * rect.width * Math.tan(fov));
 			return d;
 		}
 		return 0;
-	}
-
-	private CvSink in;
-
-	public Mat getImage() {
-		CameraServer.getInstance().addCamera(cam);
-		Mat mat = new Mat();
-		// in.grabFrame(mat);
-		CameraServer.getInstance().getVideo().grabFrame(mat);
-		CameraServer.getInstance().removeCamera(cam.getName());
-		return mat;
-	}
-
-	public Mat getImage(String name) {
-		Mat mat = new Mat();
-		//in.grabFrame(mat);
-		CameraServer.getInstance().getVideo(name).grabFrame(mat);
-		// CameraServer.getInstance().removeCamera(cam.getName());
-		return mat;
-	}
-
-	private CvSource out;
-
-	public void putImage(String name, Mat mat) {
-		CameraServer.getInstance().putVideo(name, 640, 480).putFrame(mat);
-		// out.putFrame(mat);
 	}
 
 	public Mat showBlobs(Mat src, ArrayList<Rect> blobs, Scalar color) {

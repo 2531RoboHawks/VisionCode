@@ -10,5 +10,5 @@ import frclib.vision.Vision;
  */
 public class RobotMap {
 
-	public static Vision vision = new Vision();
+	public static Vision vision;
 }
