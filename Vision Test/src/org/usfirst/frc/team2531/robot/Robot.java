@@ -1,6 +1,8 @@
 
 package org.usfirst.frc.team2531.robot;
 
+import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
 import org.usfirst.frc.team2531.robot.subsystems.DriveSystem;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -75,7 +77,9 @@ public class Robot extends IterativeRobot {
 	 */
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		cam0.showLive();
+		Mat mat = cam0.getImage();
+		cam0.setColor(0, 255, 0, 50, 0, 50);
+		cam0.showBlobs(mat, cam0.RGBgetBlobs(mat), new Scalar(0, 255, 0));
 	}
 
 	/**
