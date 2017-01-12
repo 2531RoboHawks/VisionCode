@@ -12,6 +12,7 @@ import org.opencv.imgproc.Imgproc;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoSource;
 import edu.wpi.first.wpilibj.CameraServer;
 
 public class Vision {
@@ -19,11 +20,22 @@ public class Vision {
 	private int min1 = 0, min2 = 0, min3 = 0;
 	private int max1 = 0, max2 = 0, max3 = 0;
 
+	private UsbCamera cam;
+
 	public Vision() {
-		UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
+		cam = CameraServer.getInstance().startAutomaticCapture();
 		cam.setResolution(640, 480);
-		in = CameraServer.getInstance().getVideo();
+		in = CameraServer.getInstance().getVideo("cam1");
 		out = CameraServer.getInstance().putVideo("vision", 640, 480);
+	}
+
+	public void start() {
+	}
+
+	public void updateFeed() {
+		Mat m = new Mat();
+		in.grabFrame(m);
+		out.putFrame(m);
 	}
 
 	public void setColor(int min1, int max1, int min2, int max2, int min3, int max3) {
@@ -142,17 +154,28 @@ public class Vision {
 	private CvSink in;
 
 	public Mat getImage() {
+		CameraServer.getInstance().addCamera(cam);
 		Mat mat = new Mat();
-		in.grabFrame(mat);
-		// CameraServer.getInstance().getVideo().grabFrame(mat);
+		// in.grabFrame(mat);
+		CameraServer.getInstance().getVideo().grabFrame(mat);
+		CameraServer.getInstance().removeCamera(cam.getName());
+		return mat;
+	}
+
+	public Mat getImage(VideoSource cam) {
+		CameraServer.getInstance().addCamera(cam);
+		Mat mat = new Mat();
+		// in.grabFrame(mat);
+		CameraServer.getInstance().getVideo().grabFrame(mat);
+		CameraServer.getInstance().removeCamera(cam.getName());
 		return mat;
 	}
 
 	private CvSource out;
 
 	public void putImage(String name, Mat mat) {
-		// CameraServer.getInstance().putVideo(name, 640, 480).putFrame(mat);
-		out.putFrame(mat);
+		CameraServer.getInstance().putVideo(name, 640, 480).putFrame(mat);
+		// out.putFrame(mat);
 	}
 
 	public Mat showBlobs(Mat src, ArrayList<Rect> blobs, Scalar color) {

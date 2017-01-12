@@ -6,7 +6,6 @@ import org.usfirst.frc.team2531.robot.subsystems.DriveSystem;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import frclib.vision.Vision;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -37,6 +36,7 @@ public class Robot extends IterativeRobot {
 
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
+		RobotMap.vision.updateFeed();
 	}
 
 	/**
@@ -59,6 +59,7 @@ public class Robot extends IterativeRobot {
 	 */
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
+		RobotMap.vision.updateFeed();
 	}
 
 	public void teleopInit() {
@@ -70,6 +71,7 @@ public class Robot extends IterativeRobot {
 	 */
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		RobotMap.vision.updateFeed();
 	}
 
 	/**
