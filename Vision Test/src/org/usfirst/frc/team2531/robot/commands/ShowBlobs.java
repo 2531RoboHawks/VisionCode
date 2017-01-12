@@ -4,7 +4,6 @@ import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.usfirst.frc.team2531.robot.RobotMap;
 
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -24,7 +23,7 @@ public class ShowBlobs extends Command {
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		Mat m = RobotMap.vision.getImage(CameraServer.getInstance().startAutomaticCapture(1));
+		Mat m = RobotMap.vision.getImage("cam1");
 		RobotMap.vision.setColor(0, 255, 0, 20, 0, 255);
 		RobotMap.vision.putImage("camera",
 				RobotMap.vision.showBlobs(m, RobotMap.vision.HLSgetBlobs(m), new Scalar(0, 255, 0)));

@@ -12,7 +12,6 @@ import org.opencv.imgproc.Imgproc;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
-import edu.wpi.cscore.VideoSource;
 import edu.wpi.first.wpilibj.CameraServer;
 
 public class Vision {
@@ -21,11 +20,12 @@ public class Vision {
 	private int max1 = 0, max2 = 0, max3 = 0;
 
 	private UsbCamera cam;
+	private CvSink in1;
 
 	public Vision() {
 		cam = CameraServer.getInstance().startAutomaticCapture();
 		cam.setResolution(640, 480);
-		in = CameraServer.getInstance().getVideo("cam1");
+		in1 = CameraServer.getInstance().getVideo("cam1");
 		out = CameraServer.getInstance().putVideo("vision", 640, 480);
 	}
 
@@ -162,12 +162,11 @@ public class Vision {
 		return mat;
 	}
 
-	public Mat getImage(VideoSource cam) {
-		CameraServer.getInstance().addCamera(cam);
+	public Mat getImage(String name) {
 		Mat mat = new Mat();
-		// in.grabFrame(mat);
-		CameraServer.getInstance().getVideo().grabFrame(mat);
-		CameraServer.getInstance().removeCamera(cam.getName());
+		//in.grabFrame(mat);
+		CameraServer.getInstance().getVideo(name).grabFrame(mat);
+		// CameraServer.getInstance().removeCamera(cam.getName());
 		return mat;
 	}
 
