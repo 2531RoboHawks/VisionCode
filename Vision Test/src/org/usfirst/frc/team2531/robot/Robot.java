@@ -78,8 +78,8 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 		Mat mat = cam0.getImage();
-		cam0.setColor(0, 255, 0, 50, 0, 50);
-		cam0.putImage(cam0.showBlobs(mat, cam0.RGBgetBlobs(mat), new Scalar(0, 255, 0)));
+		cam0.setColor(0, 0, 0, 20, 0, 255);
+		cam0.putImage(cam0.showBlobs(mat, cam0.HLSgetBlobs(mat), new Scalar(0, 255, 0)));
 	}
 
 	/**
