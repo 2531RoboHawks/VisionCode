@@ -1,14 +1,11 @@
 
 package org.usfirst.frc.team2531.robot;
 
-import org.opencv.core.Mat;
-import org.opencv.core.Scalar;
 import org.usfirst.frc.team2531.robot.subsystems.DriveSystem;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import frclib.vision.Vision;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -22,13 +19,15 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 	public static DriveSystem drive;
 
-	public static Vision cam0;
+	// public static Vision cam0;
+	// public static Vision cam1;
 
 	public void robotInit() {
 		System.out.println("# Robot");
 		drive = new DriveSystem();
 		oi = new OI();
-		cam0 = new Vision("cam0", 0);
+		// cam0 = new Vision("cam0", 0);
+		// cam1 = new Vision("cam1", 1);
 	}
 
 	/**
@@ -42,7 +41,11 @@ public class Robot extends IterativeRobot {
 
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
-		cam0.showLive();
+		// Mat mat = cam0.getImage();
+		// cam0.putImage(cam0.showBlobs(mat, cam0.getBlobs(mat, 50, 2, new
+		// Scalar(0, 0, 0), new Scalar(20, 20, 255)),
+		// new Scalar(0, 255, 0)));
+		// cam1.showLive();
 	}
 
 	/**
@@ -77,9 +80,11 @@ public class Robot extends IterativeRobot {
 	 */
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		Mat mat = cam0.getImage();
-		cam0.setColor(0, 0, 0, 20, 0, 255);
-		cam0.putImage(cam0.showBlobs(mat, cam0.HLSgetBlobs(mat), new Scalar(0, 255, 0)));
+		// Mat mat = cam0.getImage();
+		// cam0.setColor(0, 255, 0, 50, 0, 255);
+		// cam0.putImage(cam0.showBlobs(mat, cam0.HLSgetBlobs(mat), new
+		// Scalar(0, 255, 0)));
+		// cam1.showLive();
 	}
 
 	/**
