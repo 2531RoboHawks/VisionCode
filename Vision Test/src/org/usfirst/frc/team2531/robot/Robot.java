@@ -3,6 +3,7 @@ package org.usfirst.frc.team2531.robot;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
+import org.usfirst.frc.team2531.robot.commands.See;
 import org.usfirst.frc.team2531.robot.subsystems.DriveSystem;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -45,8 +46,8 @@ public class Robot extends IterativeRobot {
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
 		Mat mat = cam0.getImage();
-		cam0.putImage(cam0.showBlobs(mat, cam0.getBlobs(mat, 50, 2, new Scalar(0, 0, 0), new Scalar(20, 20, 255)),
-				new Scalar(0, 255, 0)));
+		cam0.setColor(100, 255, 0, 50, 0, 50);
+		cam0.putImage(cam0.showBlobs(mat, cam0.filterArea(cam0.RGBgetBlobs(mat), 0), new Scalar(0, 255, 0)));
 		// cam1.showLive();
 	}
 
@@ -61,8 +62,10 @@ public class Robot extends IterativeRobot {
 	 * chooser code above (like the commented example) or additional comparisons
 	 * to the switch structure below with additional strings & commands.
 	 */
+
 	public void autonomousInit() {
 		System.out.println("# Autonomous");
+		new See().start();
 	}
 
 	/**
@@ -82,9 +85,6 @@ public class Robot extends IterativeRobot {
 	 */
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		Mat mat = cam0.getImage();
-		cam0.setColor(0, 255, 0, 50, 0, 255);
-		cam0.putImage(cam0.showBlobs(mat, cam0.HLSgetBlobs(mat), new Scalar(0, 255, 0)));
 		// cam1.showLive();
 	}
 
