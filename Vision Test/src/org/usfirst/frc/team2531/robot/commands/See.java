@@ -17,8 +17,11 @@ import frclib.pid.PID;
  */
 public class See extends Command {
 
-	private PID m = new PID(0.0015, 0, 0, 320);
-	private double last = 0;
+	private PID t = new PID(0.002, 0, 0, 320);
+	private PID m = new PID(0.005, 0, 0, 240);
+	private double pow = 0;
+	private double fwd = 0;
+	private double lastpos = 0;
 
 	public See() {
 		// Use requires() here to declare subsystem dependencies
@@ -29,7 +32,8 @@ public class See extends Command {
 	// Called just before this Command runs the first time
 	protected void initialize() {
 		System.out.println("-> See");
-		m.setOutputLimits(-0.5, 0.5);
+		t.setOutputLimits(-0.3, 0.3);
+		m.setOutputLimits(-0.3, 0.3);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -37,28 +41,28 @@ public class See extends Command {
 		Mat mat = Robot.cam0.getImage();
 		Robot.cam0.setColor(100, 255, 0, 50, 0, 50);
 		ArrayList<Rect> l = Robot.cam0.filterArea(Robot.cam0.RGBgetBlobs(mat), 200);
-		int t = 0;
+		int x = 0;
+		int y = 0;
 		for (int i = 0; i < l.size(); i++) {
 			Rect r = l.get(i);
 			if (r != null) {
-				t = r.x + (r.width / 2);
+				x = r.x + (r.width / 2);
+				y = r.y + (r.height / 2);
 			}
 		}
 		if (!l.isEmpty()) {
-			t /= l.size();
+			x /= l.size();
+			lastpos = x;
 			mat = Robot.cam0.showBlobs(mat, l, new Scalar(0, 255, 0));
-			Imgproc.line(mat, new Point(t, 0), new Point(t, 480), new Scalar(0, 255, 0), 5);
-			double pow = m.compute(t);
-			Robot.drive.axisdrive(0, 0, -pow);
-			if (-pow > 0) {
-				last = 0.4;
-			} else {
-				last = -0.4;
-			}
+			Imgproc.line(mat, new Point(x, 0), new Point(x, 480), new Scalar(0, 255, 0), 5);
+			pow = t.compute(x);
+			fwd = m.compute(y);
+			Robot.drive.axisdrive(0, fwd, -pow);
 			Robot.cam0.putImage(mat);
 		} else {
 			Robot.cam0.showLive();
-			Robot.drive.axisdrive(0, 0, -last);
+			pow = t.compute(lastpos);
+			Robot.drive.axisdrive(0, 0, -pow);
 		}
 	}
 
