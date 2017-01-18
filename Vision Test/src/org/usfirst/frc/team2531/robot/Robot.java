@@ -85,7 +85,7 @@ public class Robot extends IterativeRobot {
 	 */
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		// cam1.showLive();
+		cam0.showLive();
 	}
 
 	/**

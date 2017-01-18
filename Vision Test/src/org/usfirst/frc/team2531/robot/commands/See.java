@@ -17,7 +17,7 @@ import frclib.pid.PID;
  */
 public class See extends Command {
 
-	private PID t = new PID(0.002, 0, 0, 320);
+	private PID t = new PID(0.001, 0, 0, 320);
 	private PID m = new PID(0.005, 0, 0, 240);
 	private double pow = 0;
 	private double fwd = 0;

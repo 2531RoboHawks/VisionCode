@@ -1,6 +1,6 @@
 package org.usfirst.frc.team2531.robot;
 
-import org.usfirst.frc.team2531.robot.commands.See;
+import org.usfirst.frc.team2531.robot.commands.Center;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -15,6 +15,6 @@ public class OI {
 
 	public OI() {
 		JoystickButton see = new JoystickButton(gamepad, 1);
-		see.whileHeld(new See());
+		see.whenPressed(new Center());
 	}
 }
