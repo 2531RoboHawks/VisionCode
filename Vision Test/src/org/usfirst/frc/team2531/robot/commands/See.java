@@ -52,6 +52,7 @@ public class See extends Command {
 		}
 		if (!l.isEmpty()) {
 			x /= l.size();
+			y /= l.size();
 			lastpos = x;
 			mat = Robot.cam0.showBlobs(mat, l, new Scalar(0, 255, 0));
 			Imgproc.line(mat, new Point(x, 0), new Point(x, 480), new Scalar(0, 255, 0), 5);
