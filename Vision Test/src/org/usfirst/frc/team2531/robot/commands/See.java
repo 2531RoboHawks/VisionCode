@@ -32,7 +32,7 @@ public class See extends Command {
 	// Called just before this Command runs the first time
 	protected void initialize() {
 		System.out.println("-> See");
-		t.setOutputLimits(-0.3, 0.3);
+		t.setOutputLimits(-0.5, 0.5);
 		m.setOutputLimits(-0.3, 0.3);
 	}
 
